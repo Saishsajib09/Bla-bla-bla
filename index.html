@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Timeline for Saish & Aishiki</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+    }
+    video.bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .overlay {
+      background-color: rgba(255, 255, 255, 0.9);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      text-align: center;
+      position: relative;
+    }
+    h1 {
+      font-size: 2.8rem;
+      color: #e91e63;
+      margin-bottom: 0.5rem;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 3px solid #e91e63;
+      animation: typing 3s steps(30, end) forwards, blink 0.75s step-end infinite;
+      max-width: 100%;
+    }
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+    h2 {
+      font-size: 1.5rem;
+      color: #3f51b5;
+      margin-bottom: 2.5rem;
+      animation: fadeIn 2s ease-in-out;
+    }
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #2e7d32;
+      margin-bottom: 2rem;
+      margin-top: 1rem;
+    }
+    .timeline {
+      position: relative;
+      max-width: 900px;
+      margin: auto;
+    }
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      background-color: #4CAF50;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .container {
+      padding: 1rem 2rem;
+      position: relative;
+      background-color: inherit;
+      width: 50%;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+    }
+    .container.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .left {
+      left: 0;
+    }
+    .right {
+      left: 50%;
+    }
+    .content {
+      padding: 20px;
+      background-color: white;
+      position: relative;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .date {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+    .container::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      right: -10px;
+      background-color: white;
+      border: 4px solid #4CAF50;
+      top: 15px;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .left::before {
+      content: " ";
+      position: absolute;
+      top: 22px;
+      right: 30px;
+      border: solid transparent;
+      border-width: 10px;
+      border-left-color: #4CAF50;
+    }
+    .right::before {
+      content: " ";
+      position: absolute;
+      top: 22px;
+      left: 30px;
+      border: solid transparent;
+      border-width: 10px;
+      border-right-color: #4CAF50;
+    }
+    @media screen and (max-width: 768px) {
+      .timeline::after {
+        left: 10px;
+      }
+      .container {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+      }
+      .left, .right {
+        left: 0%;
+      }
+      .left::before,
+      .right::before {
+        left: 60px;
+        right: auto;
+        border-left-color: #4CAF50;
+      }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: red;
+      clip-path: polygon(50% 0%, 100% 35%, 85% 100%, 50% 75%, 15% 100%, 0% 35%);
+      animation: float 6s infinite ease-in-out;
+      z-index: 999;
+      opacity: 0.7;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-120vh); }
+    }
+  </style>
+</head>
+<body>
+
+  <video id="bgVideo" class="bg-video" autoplay muted loop playsinline>
+    <source src="background.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="overlay">
+    <h1>🎉 Happy Birthday Saish</h1>
+    <h2>💕 Happy Anniversary Aishiki, with love</h2>
+    <h3 class="section-title">📖 Our Story</h3>
+
+    <div class="timeline" id="timeline"></div>
+  </div>
+
+  <audio id="chime" src="chime.mp3" preload="auto"></audio>
+
+  <script>
+    const timelineEvents = [
+      { date: '18 Jul 2023', text: 'First meet at KV Ballyghat — where it all started' },
+      { date: '19 Jul 2023', text: 'First morning walk and sweet texts' },
+      { date: '15 Aug 2023', text: 'First Independence Day celebration & first hug' },
+      { date: '24 Aug 2023', text: 'Our first kiss ❤️' },
+      { date: '29 Aug 2023', text: 'A tough turn — phone caught incident' },
+      { date: '5 Sept 2023', text: 'Celebrated Teacher\'s Day together for the first time' },
+      { date: '23 Oct 2023', text: '10 days apart — Puja vacation' },
+      { date: '10 Nov 2023', text: 'Cricket world cup memories together' },
+      { date: '2 Dec 2023', text: 'You sat on my lap 😳 (music competition)' },
+      { date: '20 Dec 2023', text: 'Sports Day fun and support' },
+      { date: '21 Dec 2023', text: 'Gown trip and night secrets 😏' },
+      { date: '30 Dec 2023', text: 'Mono bite and New Year prep' },
+      { date: '2 May 2024', text: 'First time shopping together — via video' },
+      { date: '17 Jun 2024', text: 'Met after 2 months 😢' },
+      { date: '18 Jul 2024', text: 'First Anniversary 🎉' },
+      { date: '30 Sept 2024', text: 'Our discipline phase — focused study and peace' },
+      { date: '1 Jan 2025', text: 'First New Year together & Expo visit' },
+      { date: '2 Feb 2025', text: 'Saraswati Puja — you in saree 😍' },
+      { date: '18 Apr 2025', text: 'First real shopping together 🛍️' },
+      { date: '9 Jun 2025', text: 'Big separation — you moved to Kolkata 💔' },
+      { date: '18 Jul 2025', text: '2 years of love — You, my cutie 💖' }
+    ];
+
+    const timeline = document.getElementById("timeline");
+    let isLeft = true;
+
+    timelineEvents.forEach(event => {
+      const container = document.createElement("div");
+      container.className = `container ${isLeft ? 'left' : 'right'}`;
+      const content = document.createElement("div");
+      content.className = "content";
+
+      const date = document.createElement("div");
+      date.className = "date";
+      date.textContent = event.date;
+
+      const text = document.createElement("div");
+      text.textContent = event.text;
+
+      content.appendChild(date);
+      content.appendChild(text);
+      container.appendChild(content);
+      timeline.appendChild(container);
+      isLeft = !isLeft;
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          document.getElementById("chime").play();
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.container').forEach(container => {
+      observer.observe(container);
+    });
+
+    // Floating hearts
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.style.left = Math.random() * 100 + "%";
+      heart.style.top = "100%";
+      heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }
+    setInterval(createHeart, 1000);
+  </script>
+</body>
+</html>
